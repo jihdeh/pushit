@@ -1,14 +1,15 @@
-## Pusher Client
-
-The server code can be found in the `servr-side` branch
+## Online/Offline Presence system using [Pusher](puhser.com)
 
 To run locally
 ```
 - git clone
-- yarn install
-- npm start
-- visit localhost:8888
+- yarn install OR npm install
+- npm run build:dev (development build)
+- npm run dev
+- Visit [localhost:8888](http://localhost:8888)
 
 ```
 
-Make sure the server side is running as well.
+Make sure to have set enviroment variables including your pusher keys.
+
+For example: `$ PUSHER_APP_ID=XXXXXX npm run dev`
