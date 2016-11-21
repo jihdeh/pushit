@@ -41,11 +41,7 @@ module.exports = {
 	},
 	plugins: [
 		new WebpackCleanupPlugin(),
-		new webpack.DefinePlugin({
-			"process.env": {
-				NODE_ENV: "production"
-			}
-		}),
+		new webpack.DefinePlugin({}),
 		new webpack.optimize.UglifyJsPlugin({
 			compress: {
 				warnings: false,
@@ -60,7 +56,7 @@ module.exports = {
 		}),
 		new HtmlWebpackPlugin({
 			template: "./src/template.html",
-			title: "Currently Viewing App"
+			title: "Currently Viewing pusher"
 		}),
 		new webpack.optimize.DedupePlugin()
 	]

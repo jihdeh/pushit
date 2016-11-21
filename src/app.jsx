@@ -1,19 +1,10 @@
 import styles from "./index.scss";
 import React from "react";
 import axios from "axios";
-import uuid from "node-uuid";
-import {map, reduce, unnest} from "ramda";
-import {toArray} from "lodash";
-
-var styleObj = {
-  well: {
-    backgoundColor: "#fff"
-  }
-}
 
 export default class App extends React.Component {
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
 		this.state = {
 			visitors: [],
 			count: 0,
@@ -21,62 +12,65 @@ export default class App extends React.Component {
 		};
 		this.configPusher = this.configPusher.bind(this);
 	}
-	componentWillMount() {
-	}
 	componentDidMount() {
 		this.configPusher();
 	}
 	async configPusher() {
 		let visitorList = [];
-		const pusher = new Pusher("17f5eb2c46f9806ed5c9", {
-	    	authTransport: "jsonp",
-	    	socket_id: uuid.v4(),
-	    	channel_name: "presence-pushit-channel",
-		    authEndpoint: "https://22e6b06c.ngrok.io/api/pusher/auth",
-		    encrypted: true
-	    });
-	    const channel = pusher.subscribe("presence-pushit-channel");
-	    channel.bind("pusher:subscription_succeeded", (members) => {
-	    	let visitor = members.me;
-	    	members.each(function(member) {
-		    	visitorList.push(member);
-			  });
-	    	this.setState({
-	    		visitors: visitorList,
-	    		count: members.count,
-	    		visitor
-	    	});
-		});
-		channel.bind("pusher:member_added", (member) => {
-			const visitors = [...this.state.visitors];
-			const position = visitors.map(v => v.id ).indexOf(member.id);
-			let updateCount = this.state.count;
-			if(position < 0) {
-				visitors.push(member);
-				updateCount += 1;
-			}
-			this.setState({
-				visitors,
-				count: updateCount
+		const PUSHER_KEY = "17f5eb2c46f9806ed5c9";
+		try {
+			const userData = await axios.get("https://ipinfo.io/ip");
+			const pusher = new Pusher(PUSHER_KEY, {
+		    	authTransport: "jsonp",
+		    	channel_name: "presence-pushit-channel",
+			    authEndpoint: `/api/pusher/auth/${userData.data}`, //change here to your backend domain if you have an external domain
+			    encrypted: true
+		    });
+		    const channel = pusher.subscribe("presence-pushit-channel");
+		    channel.bind("pusher:subscription_succeeded", (members) => {
+		    	let visitor = members.me;
+		    	members.each(function(member) {
+			    	visitorList.push(member);
+			    });
+		    	this.setState({
+		    		visitors: visitorList,
+		    		count: members.count,
+		    		visitor
+		    	});
 			});
-		});
+			channel.bind("pusher:member_added", (member) => {
+				const visitors = [...this.state.visitors];
+				const position = visitors.map(v => v.id ).indexOf(member.id);
+				let updateCount = this.state.count;
+				if(position < 0) {
+					visitors.push(member);
+					updateCount += 1;
+				}
+				this.setState({
+					visitors,
+					count: updateCount
+				});
+			});
 
-		channel.bind("pusher:member_removed", (member) => {
-			const visitors = [...this.state.visitors];
-			let updateCount = this.state.count;
-			let pusher = new Pusher("17f5eb2c46f9806ed5c9");
-			//unsub user from getting futher messages
-			pusher.unsubscribe("presence-pushit-channel");
-			const position = visitors.map(v => v.id ).indexOf(member.id);
-			if(position > -1) {
-				visitors.splice(position, 1);
-				updateCount -= 1;
-			};
-			this.setState({
-				visitors,
-				count: updateCount
+			channel.bind("pusher:member_removed", (member) => {
+				const visitors = [...this.state.visitors];
+				let updateCount = this.state.count;
+				let pusher = new Pusher(PUSHER_KEY);
+				//unsub user from getting futher messages
+				pusher.unsubscribe("presence-pushit-channel");
+				const position = visitors.map(v => v.id ).indexOf(member.id);
+				if(position > -1) {
+					visitors.splice(position, 1);
+					updateCount -= 1;
+				};
+				this.setState({
+					visitors,
+					count: updateCount
+				});
 			});
-		});
+		} catch(error) {
+			console.log("error", error)
+		}
 	}
 	render() {
 		const {visitors, count, visitor} = this.state;
@@ -132,7 +126,9 @@ export default class App extends React.Component {
 						</div>
 					</div>
 				</div><br/><br/>
-				<p style={{textAlign: "center"}}>Displays a list of users ip addresses currently visiting the page.</p>
+				<p style={{textAlign: "center"}}>Displays a list of users ip addresses currently visiting the page.The names
+				are randomly generated.
+				</p>
 			</div>
 		</div>
 		)
