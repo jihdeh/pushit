@@ -8,7 +8,7 @@ Real-time is a level of system responsiveness that is immediate or that enables 
 
 
 ### Getting Started
-First, we need to create a free account at [Pusher](pusher.com), then get our API keys. You will either be promtped to create a new app or click the create new app button and a modal dialog would pop up.
+First, we need to create a free account at [Pusher](pusher.com), then get our API keys. You will either be prompted to create a new app or click the create new app button and a modal dialog would pop up.
 
 [![Create your app](https://s15.postimg.org/bmkc5ceuj/Screen_Shot_2016_11_21_at_7_44_17_PM.png)](https://postimg.org/image/lwmr4l4pz/)
 
@@ -105,20 +105,25 @@ componentDidMount() {
 }
 async configPusher() {
   let visitorList = [];
-    const PUSHER_KEY = "YOUR_PUSHER_KEY";
-    try {
-      //get ip information
-      const userData = await axios.get("https://ipinfo.io/ip");
-        
-        //user authentication procress
-        const pusher = new Pusher(PUSHER_KEY, {
-          authTransport: "jsonp",
-            channel_name: "presence-pushit-channel",
-            authEndpoint: `/api/pusher/auth/${userData.data}`,
-            encrypted: true
-        });
-        //Subscribe to the presence channel
-        const channel = pusher.subscribe("presence-pushit-channel");
+  const PUSHER_KEY = "YOUR_PUSHER_KEY";
+  try {
+    //get ip information
+    const userData = await axios.get("https://ipinfo.io/ip");
+    
+    //user authentication procress
+    const pusher = new Pusher(PUSHER_KEY, {
+      authTransport: "jsonp",
+      channel_name: "presence-pushit-channel",
+      authEndpoint: `/api/pusher/auth/${userData.data}`,
+      encrypted: true
+    });
+
+    //Subscribe to the presence channel
+    const channel = pusher.subscribe("presence-pushit-channel");
+
+    ....
+} catch(error) {
+  //TODO: Handle your errors here
 }
 ```
 
@@ -163,17 +168,19 @@ channel.bind("pusher:member_added", (member) => {
 });
 ```
 
-And if we want to detect when a visitor leaves our channel, either they loose internet connection, refresh the page or the close their browser tab. We can do that via the `pusher:member_removed` event handler. In this event, we want to remove the visitor that leaves the page and update our view.
+And if we want to detect when a visitor leaves our channel, either they lose internet connection, refresh the page or the close their browser tab. We can do that via the `pusher:member_removed` event handler. In this event, we want to remove the visitor that leaves the page and update our view.
 
 ```javascript
 channel.bind("pusher:member_removed", (member) => {
   const visitors = [...this.state.visitors];
   let updateCount = this.state.count;
-    //unsubscribe visitor
+
+  //unsubscribe visitor
   let pusher = new Pusher(PUSHER_KEY);
   pusher.unsubscribe("presence-pushit-channel");
   const memberIndex = visitors.map(v => v.id ).indexOf(member.id);
-    //remove leaving member from array list
+
+  //remove leaving member from array list
   if(memberIndex > -1) {
     visitors.splice(memberIndex, 1);
     updateCount -= 1;
