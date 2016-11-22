@@ -10,6 +10,6 @@ To run locally
 
 ```
 
-Make sure to have set enviroment variables including your pusher keys.
+IMPORTANT: Make sure to have set enviroment variables including your pusher keys.
 
-For example: `$ PUSHER_APP_ID=XXXXXX npm run dev`
+For example: `$ PUSHER_APP_ID=XXXXXX PUSHER_APP_KEY=XXXXXX PUSHER_APP_SECRET=XXXXX npm run dev`
