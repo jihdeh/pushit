@@ -1,7 +1,6 @@
 import log from "../../util/log";
 import pusher from "../config";
 import Chance from "chance";
-import axios from "axios";
 let chance = new Chance();
 
 function* authorizeChannel() {
@@ -18,7 +17,7 @@ function* authorizeChannel() {
       }
     };
     const auth = JSON.stringify(pusher.authenticate(socketId, channel, presenceData));
-    var cb = callback.replace(/\"/g, "") + "(" + auth + ");";
+    const cb = callback.replace(/\"/g, "") + "(" + auth + ");";
     this.set = {
       "Content-Type": "application/javascript"
     };

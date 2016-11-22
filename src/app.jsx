@@ -1,8 +1,8 @@
 import styles from "./index.scss";
-import React from "react";
+import React, {Component} from "react";
 import axios from "axios";
 
-export default class App extends React.Component {
+export default class App extends Component {
 	constructor() {
 		super();
 		this.state = {
@@ -40,9 +40,9 @@ export default class App extends React.Component {
 			});
 			channel.bind("pusher:member_added", (member) => {
 				const visitors = [...this.state.visitors];
-				const position = visitors.map(v => v.id ).indexOf(member.id);
+				const memberIndex = visitors.map(v => v.id ).indexOf(member.id);
 				let updateCount = this.state.count;
-				if(position < 0) {
+				if(memberIndex < 0) {
 					visitors.push(member);
 					updateCount += 1;
 				}
@@ -58,9 +58,9 @@ export default class App extends React.Component {
 				let pusher = new Pusher(PUSHER_KEY);
 				//unsub user from getting futher messages
 				pusher.unsubscribe("presence-pushit-channel");
-				const position = visitors.map(v => v.id ).indexOf(member.id);
-				if(position > -1) {
-					visitors.splice(position, 1);
+				const memberIndex = visitors.map(v => v.id ).indexOf(member.id);
+				if(memberIndex > -1) {
+					visitors.splice(memberIndex, 1);
 					updateCount -= 1;
 				};
 				this.setState({
