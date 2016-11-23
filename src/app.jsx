@@ -29,7 +29,7 @@ export default class App extends Component {
 		    const channel = pusher.subscribe("presence-pushit-channel");
 		    channel.bind("pusher:subscription_succeeded", (members) => {
 		    	let visitor = members.me;
-		    	members.each(function(member) {
+		    	members.each(member => {
 			    	visitorList.push(member);
 			    });
 		    	this.setState({

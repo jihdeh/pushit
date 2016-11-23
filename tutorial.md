@@ -59,7 +59,7 @@ export default class App from Component{
           count: 0, //count number of online visitors
           visitor: null //store your user information
         }
-        this.configPusher = this.configPusher.bind(this);
+        this.configPusher = this.configPusher.bind(this); //we will get to this later
     }
 }
 ```
@@ -138,7 +138,7 @@ Inside of our `configPusher` function add this next snippet of code. Our aim is 
 ....
 channel.bind("pusher:subscription_succeeded", (members) => {
   let visitor = members.me;
-  members.each(function(member) {
+  members.each(member => {
     visitorList.push(member);
   });
   this.setState({
@@ -150,7 +150,7 @@ channel.bind("pusher:subscription_succeeded", (members) => {
             
 ```
 
-Once a subscription has been made to our presence channel, an event is triggered returning our list of members in the callback including your information which can be accessed through `members.me`. We would discuss where this information comes from in the later part of this tutorial.
+Once a subscription has been made to our presence channel, an event is triggered returning our list of members in the callback including your information which can be accessed through `members.me`. We will discuss where this information comes from in the later part of this tutorial.
 
 When a visitor joins our channel, an event is triggered `pusher:member_added`. The event returns the currently joined member object in the callback. In this event, we would want to update our view with the new visitor and also increase the count of visitors.
 
