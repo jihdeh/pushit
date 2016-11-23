@@ -56,8 +56,8 @@ export default class App from Component{
       super();
         this.state = {
           visitors: [], //store a list of visitors
-            count: 0, //count number of online visitors
-            visitor: null //store your user information
+          count: 0, //count number of online visitors
+          visitor: null //store your user information
         }
         this.configPusher = this.configPusher.bind(this);
     }
