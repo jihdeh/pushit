@@ -3,12 +3,14 @@
 **TL;DR:** [Pusher](pusher.com) is a hosted service for quickly and easily adding real-time functionality to your web, mobile, and IOT devices. In this post, we'll be building an online/offline presence system using ReactJS on the client-side and server-side using Nodejs and Koa. The full code is available in this [Github repo](https://github.com/jihdeh/pushit)
 
 
-### What is Real-Time?
+Pusher is a service that has been in existence since 2011 and since then been doing a great job in delivering real-time service. Companies such as [Github](https://github.com), [Intercom](https://intercom.io), [Mailchimp](https://mailchimp.com) and many more use Pusher.
+Back in time, most software developers go through a tough time setting up a real-time system using websockets and making sure it runs perfectly in their applications, and they also have to maintain the system, Pusher helps to simplify that complexity.
+Examples of real-time features can be found in web applications like Facebook's comment system, or Twitter's post feed.
+
 Real-time is a level of system responsiveness that is immediate or that enables the system to keep up with some external process. If you would like to know more about real-time, [read here](https://blog.pusher.com/what-is-real-time/).
 
-
 ### Getting Started
-First, we need to create a free account at [Pusher](pusher.com), then get our API keys. You will either be prompted to create a new app or click the create new app button and a modal dialog would pop up.
+First, we need to create a free account at [Pusher](pusher.com), then get our API keys. On your first login, you will either be prompted to create a new app or click the create new app button and a modal dialog would pop up for you to enter the details of your new application.
 
 [![Create your app](https://s15.postimg.org/bmkc5ceuj/Screen_Shot_2016_11_21_at_7_44_17_PM.png)](https://postimg.org/image/lwmr4l4pz/)
 
@@ -41,7 +43,7 @@ In your React application open your `index.html` page and let's include the Java
 
 ```
 
-What we want to achieve is to display a list of visitors IP address currently viewing our web application, and if they leave the application, they should be taken out of the list without requiring us to refresh the page to see changes.
+What we want to achieve is to display a list of visitors IP addresses currently viewing our web application, and if they leave the application, they should be taken out of the list without requiring us to refresh the page to see changes.
 
 Next, let's create a React Component and we'll call it App component.
 
@@ -60,7 +62,7 @@ export default class App from Component{
     }
 }
 ```
-In order to get our visitors IP addresses, we would need to use a service, in this case, i would be using [IpInfo.io](https://ipinfo.io/ip).
+In order to get our visitors IP addresses, we would need to use a service to get IP addresses, in this case, we would be using [IpInfo.io](https://ipinfo.io/ip).
 
 Next, we would have to open a connection to Pusher.
 
@@ -89,9 +91,9 @@ The HTTP request parameters contain
 
 If your backend is hosted somewhere else, you need to set the `authTransport` Pusher constructor option to JSONP and pass `authEndpoint` value.
 
-However in the example above I didn't use a different domain, only because I wanted to pass the visitors public IP address as a parameter to the URL to be accessible on the backend.
+However in the example above we didn't use a different domain, only because we wanted to pass the visitors public IP address as a parameter to the URL to be accessible on the backend.
 
-NOTE: A visitor's IP address can also be gotten on the server side, but there are issues where the returned IP address is the server's IP and not of the visitor.
+NOTE: A visitor's IP address can also be gotten on the server side, but there are cases where the returned IP address is the server's IP and not of the visitor.
 
 Updated Code:
 
