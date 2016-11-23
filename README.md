@@ -1,5 +1,7 @@
 ## Online/Offline Presence system using [Pusher](puhser.com)
 
+Tutorial can be found [here](https://github.com/jihdeh/pushit/blob/master/tutorial.md)
+
 To run locally
 ```
 - git clone
